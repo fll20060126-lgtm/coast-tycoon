@@ -1,0 +1,150 @@
+/* 海岸大亨 · 按效果图还原 v-island5 */
+#gameScreen{background:radial-gradient(ellipse at 50% 0%,#fdf6e3 0%,#f6ecd4 55%,#eddcba 100%);color:#173d47;min-height:100dvh;height:auto;overflow:visible;display:flex;flex-direction:column}
+.panel-source{display:none!important}
+
+/* ===== 顶栏 ===== */
+#gameScreen .topbar{display:flex;align-items:center;gap:18px;padding:10px 22px;background:#fffaf0f2;border-bottom:2px solid #e7d9b8;box-shadow:0 4px 18px #8a6f3c14;flex:none;height:auto;min-height:0}
+#gameScreen .brand{font-size:30px;font-weight:900;color:#0b5a5e;letter-spacing:3px;white-space:nowrap}
+#gameScreen .brand-island{margin-right:6px}
+#gameScreen .goal-line{flex:1;text-align:center;font-size:15px;color:#3d5a5e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#gameScreen #compactGoal{font-weight:800;color:#26444a}
+#gameScreen .goal-line .sep{color:#b9a06a;margin:0 10px}
+#gameScreen #round{font-size:14px;color:#3d5a5e;background:none;padding:0}
+#gameScreen .top-actions{display:flex;gap:8px;flex:none}
+#gameScreen .top-actions button{background:#fffdf4;border:1px solid #e2d3ab;border-radius:12px;padding:9px 13px;font-size:13px;font-weight:700;color:#2c4a4e;box-shadow:0 2px 0 #e2d3ab;min-height:0}
+#gameScreen .top-actions button:hover:enabled{background:#fff3d9}
+#gameScreen #sound{background:linear-gradient(#2aa6a1,#147b7d);border-color:#147b7d;color:#fff;box-shadow:0 2px 0 #0f5f5c}
+#gameScreen #help,#gameScreen #reset{display:none}
+
+/* ===== 主区域 ===== */
+#gameScreen .game-main{flex:1;min-height:0;display:flex;flex-direction:row;gap:14px;padding:12px 16px;align-items:stretch;max-width:none;margin:0;width:100%}
+#gameScreen .board-zone{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;position:relative}
+#gameScreen .camera-bar{display:none!important}
+
+/* ===== 棋盘 ===== */
+#board{display:grid;grid-template:repeat(7,minmax(0,1fr))/repeat(7,minmax(0,1fr));gap:7px;aspect-ratio:1/1;width:min(100%,calc(100dvh - 200px));height:auto;background:#5f7f7a;border:9px solid #4e6e6a;border-radius:22px;padding:9px;box-shadow:0 6px 0 #43605c,0 14px 28px #1d4a4c55;position:relative;transform:none}
+#board .tile{position:relative;background:linear-gradient(#fffef8,#fdf3da);border:1px solid #e3d3a8;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:13px 2px 4px;cursor:pointer;overflow:hidden;box-shadow:0 3px 0 #d9c69a;transition:transform .15s;min-width:0;min-height:0}
+#board .tile:hover{transform:translateY(-2px)}
+#board .tile .stripe{position:absolute;top:0;left:0;right:0;height:9px;background:var(--band);border-radius:10px 10px 0 0}
+#board .tile .label{font-size:clamp(10px,1.1vw,15px);font-weight:800;color:#173d47;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#board .tile .price{font-size:clamp(8px,.85vw,11px);color:#5b7a80;white-space:pre-line;line-height:1.5;margin-top:3px;text-align:center}
+#board .tile.current{outline:3px solid #2aa6a1;background:linear-gradient(#eafaf7,#d7f0e9)}
+#board .tile .owner{position:absolute;bottom:0;left:0;right:0;height:5px}
+/* 棋子 */
+#board .tile .tokens{position:absolute;right:2px;bottom:4px;display:flex;z-index:6;min-height:0;height:auto;margin:0;gap:0}
+#board .token{position:relative;width:24px;height:18px;margin-left:-10px;background:transparent!important;border:0!important;box-shadow:none!important;animation:none}
+#board .token:first-child{margin-left:0}
+#board .illustrated-pawn>.character-art{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:36px;height:47px;filter:drop-shadow(1px 3px 2px #1d383c55)}
+/* 拥有建筑 */
+#board .mini-building{position:absolute;left:5px;top:16px;width:26px;height:26px;pointer-events:none}
+#board .mini-building i{display:none}
+#board .mini-building::after{content:'🏠';font-size:21px;filter:drop-shadow(0 2px 2px #0003)}
+#board .mini-building.level-2::after{content:'🏘️'}
+#board .mini-building.level-3::after{content:'🏰'}
+/* 特殊格 */
+#board .tile-chance{background:linear-gradient(#fff6da,#f7ddae)}
+#board .tile-chance .price{display:none}
+#board .tile-chance::before,#board .tile-chance::after{content:'?';position:absolute;top:40%;width:22px;height:30px;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px;box-shadow:0 2px 4px #0003}
+#board .tile-chance::before{background:#e05a5a;left:50%;transform:translateX(-90%) rotate(-8deg)}
+#board .tile-chance::after{background:#4a7fd4;left:50%;transform:translateX(-10%) rotate(8deg)}
+#board .tile-storm{background:linear-gradient(#33415c,#232f47);border-color:#1c2637}
+#board .tile-storm .label{color:#fff}
+#board .tile-storm .price{color:#b9c6d8}
+#board .tile-storm::before{content:'⛈️';font-size:24px;line-height:1.4}
+#board .tile-rest{background:linear-gradient(#e4f0c0,#b9d68a);border-color:#9cbf6e}
+#board .tile-rest::before{content:'⛲';font-size:24px;line-height:1.4}
+#board .tile-start{background:linear-gradient(#fdf6dd,#f7e8bd)}
+#board .tile-start::before{content:'➔';color:#d84a3a;font-size:26px;font-weight:900;line-height:1.2}
+#board .tile-start .label{color:#0b5a5e}
+/* 中央舄湖 */
+#board .center-lagoon{grid-area:2/2/7/7;background:url('assets/coast-island.199374fa09.webp') center/cover;border-radius:16px;border:4px solid #fff8e6;box-shadow:inset 0 0 30px #2a6a7044;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;min-width:0;min-height:0}
+#board .center-lagoon h2{font-size:clamp(24px,3.4vw,46px);font-weight:900;letter-spacing:6px;color:#074b57;background:#e8fbfa99;padding:10px 26px;border-radius:999px;margin:0;text-shadow:0 1px 0 #fff}
+#board .center-lagoon p{color:#0b5a5e;font-size:12px;background:#ffffff88;padding:4px 14px;border-radius:999px;margin:10px 0 0}
+
+/* ===== 右侧面板 ===== */
+#gameScreen .side-panel{width:332px;flex:none;display:flex;flex-direction:column;gap:12px;min-height:0;overflow-y:auto;padding-bottom:4px}
+#gameScreen .side-panel .card{background:#fffdf6;border:1px solid #eee0bd;border-radius:18px;padding:14px;box-shadow:0 6px 18px #8a6f3c14;margin:0}
+#gameScreen .card-title{font-size:14px;font-weight:800;color:#26444a;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+#gameScreen .card-title span{font-size:10px;color:#93a3a0;font-weight:400}
+/* 玩家卡 */
+#players{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#players .player{background:#f7f1de;border:2px solid transparent;border-radius:14px;padding:10px 4px;text-align:center;position:relative;overflow:visible;margin:0}
+#players .player:first-child{background:#dcefe8}
+#players .player:last-child{background:#ddeaf5}
+#players .player.active{border-color:#169996;box-shadow:0 0 0 1px #169996}
+#players .player.out{opacity:.45}
+#players .player-top{display:block;margin:0}
+#players .avatar{width:44px;height:54px;margin:0 auto;display:block;background:transparent;border-radius:12px;overflow:hidden}
+#players .avatar .character-art{width:44px;height:54px}
+#players .player-top strong{display:block;font-size:13px;margin-top:2px}
+#players .player-top small{display:none}
+#players .cash{font-size:17px;font-weight:800;color:#173d47;margin-top:4px}
+#players .meta{display:none!important}
+/* 骰子卡 */
+#gameScreen .dice-card{display:flex;align-items:center;gap:18px;background:linear-gradient(130deg,#e9f2da,#d6ece1)}
+#dice{width:88px;height:88px;flex:none;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);gap:6px;padding:15px;background:linear-gradient(135deg,#fffef8,#e8e2d0);border-radius:20px;box-shadow:6px 10px 0 #c9c4b2,12px 20px 18px #34504733;transform:rotate(-12deg);margin:0;font-size:0;filter:none;line-height:1}
+#dice i.pip{background:radial-gradient(circle at 35% 30%,#4d4c45,#141818);border-radius:50%;box-shadow:inset 0 2px 1px #1114}
+#dice i.empty{visibility:hidden}
+#dice.rolling{animation:dice-roll .18s infinite}
+@keyframes dice-roll{50%{transform:rotate(15deg) scale(.92)}}
+#gameScreen .dice-right{flex:1;text-align:center;min-width:0}
+#turn{font-size:21px;font-weight:900;color:#0b5a5e}
+#diceNumber{display:inline-block;margin-top:8px;font-size:38px;font-weight:900;color:#173d47;background:#fff9e8;border-radius:14px;padding:6px 26px;box-shadow:inset 0 0 0 1px #eee0bd;line-height:1.2}
+/* 购买卡 */
+#gameScreen .trade-card{background:#fffdf3}
+#status{font-size:15px;font-weight:700;color:#193d48;line-height:1.6;margin-bottom:10px;max-width:none;min-height:0}
+#status .hl{color:#2f7fd0;font-weight:900}
+#tradeQuote{display:flex;gap:8px;margin-bottom:10px}
+#tradeQuote[hidden]{display:none}
+#tradeQuote span{flex:1;background:#f3ecda;border-radius:12px;padding:10px 4px;font-size:13px;font-weight:700;text-align:center;white-space:nowrap}
+#tradeQuote b{color:#9a6b12}
+#gameScreen #actions{display:flex;flex-direction:column;gap:8px;min-height:0}
+#gameScreen #actions button{padding:13px;font-size:15px;font-weight:800;border-radius:13px;border:0;min-height:0}
+#gameScreen #actions button:first-child{background:linear-gradient(#25a09a,#147b7d);color:#fff;box-shadow:0 3px 0 #0f5f5c}
+#gameScreen #actions button:first-child:hover:enabled{background:linear-gradient(#2bb3ac,#189092)}
+#gameScreen #actions button:last-child{background:#e9e4d6;color:#5b6b66;box-shadow:0 3px 0 #d5cdb8}
+#gameScreen #actions button:only-child:last-child{background:linear-gradient(#25a09a,#147b7d);color:#fff;box-shadow:0 3px 0 #0f5f5c}
+/* 最近动态 */
+#gameScreen .recent-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+#gameScreen .recent-heading strong{font-size:14px;color:#26444a}
+#allEvents{background:none;border:0;color:#8a9a96;font-size:12px;padding:4px;min-height:0}
+#allEvents:hover{color:#0b5a5e}
+#recentEvents p{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:#4a5f60;line-height:1.6;margin:0;padding:8px 0;border-top:1px dashed #e8dcc0}
+#recentEvents p:first-child{border-top:0}
+#recentEvents p i{font-style:normal;flex:none}
+
+/* ===== 信息弹窗 ===== */
+#infoPanel{border:0;border-radius:20px;padding:22px;width:min(680px,94vw);max-height:92dvh;overflow:auto;color:#26444a}
+#infoPanel::backdrop{background:#163d3b66}
+#infoPanel .panel-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+#infoPanel .panel-heading h2{margin:0;font-size:19px}
+#infoPanel .panel-heading button{width:auto;padding:8px 14px}
+#infoPanel .page-controls{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:12px}
+#infoPanel .page-controls button{width:auto}
+
+/* ===== 金币浮动特效 ===== */
+#players .player{position:relative}
+.money-float{position:absolute;right:8px;top:36px;font-weight:800;font-size:18px;pointer-events:none;z-index:5;text-shadow:0 2px 1px #fff;animation:money-rise 1.7s ease-out forwards}
+.money-float.positive{color:#218755}
+.money-float.negative{color:#c55045}
+.player.money-gain{animation:gain-flash 1.4s ease-out}
+.player.money-loss{animation:loss-flash 1.4s ease-out}
+@keyframes money-rise{0%{opacity:0;transform:translateY(10px) scale(.7)}15%{opacity:1;transform:translateY(0) scale(1.1)}60%{opacity:1}100%{opacity:0;transform:translateY(-60px) scale(1)}}
+@keyframes gain-flash{15%{background:#ccf1d6}100%{background:transparent}}
+@keyframes loss-flash{15%{background:#ffe0d4}100%{background:transparent}}
+
+/* ===== 小屏：允许滚动，不强制重构 ===== */
+@media(max-width:1100px){
+ #gameScreen .game-main{flex-direction:column;overflow:visible}
+ #gameScreen .board-zone{order:0}
+ #board{width:min(100%,calc(100dvh - 200px))}
+ #gameScreen .side-panel{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}
+ #gameScreen .players-card{grid-column:1/-1}
+ #gameScreen .events-card{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){
+ #dice.rolling,.player.money-gain,.player.money-loss{animation:none}
+ .money-float{animation:money-fade 1.7s forwards}
+ @keyframes money-fade{0%,80%{opacity:1}100%{opacity:0}}
+ #board .tile{transition:none}
+}
