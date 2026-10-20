@@ -25,14 +25,20 @@
   const quote=document.getElementById('tradeQuote');quote.replaceChildren();
   const pos=s.players[s.turn].pos;
   const buying=s.phase==='land'&&tiles[pos].type==='land'&&!s.lots[pos]&&!(s.turn===0&&s.acted);
+  const ownHere=s.turn===0&&s.phase==='end'&&tiles[pos].type==='land'&&s.lots[pos]?.owner===0;
   const status=document.getElementById('status');
   if(buying&&s.turn===0&&s.acted){
    status.textContent='本回合行动已用完（已购地或已升级），不能再买地，请结束回合。';
   }else if(buying){   const name=document.createElement('span');name.className='hl';name.textContent=tiles[pos].name;
    status.replaceChildren('抵达',name,'，是否购买？');
    for(const [icon,label,val] of [['🏠','买地',purchaseCost(pos)],['🪙','租金',rentPreview(pos)]]){const chip=document.createElement('span');const b=document.createElement('b');b.textContent=val;chip.append(icon+' '+label+' ',b);quote.append(chip)}
+  }else if(ownHere){
+   const reason=upgradeBlockReason(pos),level=s.lots[pos].level,cost=upgradeCost(pos,0);
+   status.textContent=tiles[pos].name+' · '+(reason||('可升级，升级后余额 '+(s.players[0].cash-cost)+' 金币'));
+   const values=level>=3?[['🏠','等级','3 / 3'],['🪙','租金',rent(pos)]]:[['🏗️','升级费',cost],['🪙','新租金',rentPreview(pos,0,level+1)]];
+   for(const [icon,label,val] of values){const chip=document.createElement('span'),b=document.createElement('b');b.textContent=val;chip.append(icon+' '+label+' ',b);quote.append(chip)}
   }else status.textContent=s.message;
-  quote.hidden=!(buying&&!(s.turn===0&&s.acted));
+  quote.hidden=!(buying||ownHere);
   const actionButtons=document.querySelectorAll('#actions button');
   if(buying&&s.turn===0&&actionButtons.length===2){actionButtons[0].textContent=actionButtons[0].disabled?'金币不足':'购买地产';actionButtons[1].textContent='暂不购买'}
  }

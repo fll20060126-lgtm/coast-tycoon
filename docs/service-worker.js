@@ -1,4 +1,4 @@
-const CACHE='coast-pages-bc64129806c5-pages';
+const CACHE='coast-pages-estate-entry-20261020';
 const FILES=["./","./audio.js","./cards.css","./cards.js","./duel.css","./duel.js","./game.js","./home.css","./index.html","./island.css","./layout.js","./mobile.js","./quests.css","./quests.js","./scene.css","./scene.js","./style.css"];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES))));
 self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting()});
